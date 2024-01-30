@@ -1,7 +1,7 @@
 .booking-grid {
     width: 90%; /* Full width */
     text-align: center; /* Center text horizontally */
-    margin: 4% auto auto auto;
+    margin: 4% auto 0% auto;
 }
 
 .no-gutters {
@@ -22,4 +22,11 @@
 
 .row-data {
     border: 1px solid gray;
+}
+
+.no-select {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Safari */
 }

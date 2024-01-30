@@ -14,7 +14,7 @@ function BookingGrid() {
     for (let index = 0; index < ROWS_COUNT; index++) {
       rows.push(
         <Grid.Row>
-          <div className='row-data'>
+          <div className='row-data no-select'>
             gogi
           </div>
         </Grid.Row>
