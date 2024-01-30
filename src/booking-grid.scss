@@ -1,8 +1,25 @@
-.hours-available-row {
-    background-color: red;
+.booking-grid {
+    width: 90%; /* Full width */
+    text-align: center; /* Center text horizontally */
+    margin: 4% auto auto auto;
 }
 
-.table-numbers-column {
-    background-color: green;
+.no-gutters {
+    .row,
+    .column {
+        padding: 0 !important;
+    }
+    
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    
+    .column {
+        margin: 0 !important;
+    }
 }
 
+.row-data {
+    border: 1px solid gray;
+}

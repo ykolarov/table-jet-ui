@@ -5,7 +5,7 @@ import { Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
 function BookingGrid() {
-  const COLUMNS_COUNT = 13;
+  const COLUMNS_COUNT = 16;
   const ROWS_COUNT = 45;
 
   const getRows = () => {
@@ -14,7 +14,9 @@ function BookingGrid() {
     for (let index = 0; index < ROWS_COUNT; index++) {
       rows.push(
         <Grid.Row>
-          0
+          <div className='row-data'>
+            gogi
+          </div>
         </Grid.Row>
       )
     }
@@ -27,7 +29,7 @@ function BookingGrid() {
 
     for (let index = 0; index < COLUMNS_COUNT; index++) {
       columns.push(
-        <Grid.Column width={1}>
+        <Grid.Column>
           {getRows()}
         </Grid.Column>
       )
@@ -38,14 +40,12 @@ function BookingGrid() {
 
   return (
     <div className="booking-grid">
-      <Grid>
+      <Grid className="no-gutters" >
         <Grid.Row>
           {getColumns()}
         </Grid.Row>
       </Grid>
     </div>
-    // <HoursAvailableRow/>
-    //<TableNumbersColumn/>
   );
 }
 
