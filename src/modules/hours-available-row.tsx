@@ -2,20 +2,17 @@ import '../booking-grid.scss';
 
 function HoursAvailableRow() {
   let hoursAvailableList = [
-    undefined,
-    4,
-    undefined,
-    5,
-    undefined,
-    6,
-    undefined,
-    7,
-    undefined,
-    8,
-    undefined,
-    9,
-    undefined,
-    10
+    "17:00",
+    "17:30",
+    "18:00",
+    "18:30",
+    "19:00",
+    "19:30",
+    "20:00",
+    "20:30",
+    "21:00",
+    "21:30",
+    "22:00"
   ];
       
   return (
