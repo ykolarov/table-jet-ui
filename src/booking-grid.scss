@@ -4,6 +4,10 @@
     margin: 2% auto 0% auto;
 }
 
+.hidden {
+    display:none;
+}
+
 .booked {
     background-color: rgb(227, 236, 175);
     white-space: nowrap;
@@ -26,10 +30,23 @@
     }
 }
 
-.calendar {
-    margin: 1rem auto 1% auto;
-    width: 90%; /* Full width */
-    text-align: center; /* Center text horizontally */
+.homepage-header {
+    width: 90%;
+    display: flex;
+    align-items: center; /* Equal height for children */
+    justify-content: flex-start;
+    margin: 1% auto 0% auto;
+
+    .calendar {
+        text-align: center;
+        padding: 5px;
+        max-width: fit-content;
+    }
+
+    .add-booking {
+        padding: 5px !important;
+        max-width: fit-content;
+    }
 }
 
 .row-data {
@@ -41,4 +58,28 @@
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Safari */
+}
+
+.popup {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: fit-content;
+    z-index: 999; /* Set a high value to ensure it's on top */
+}
+
+label {
+    padding-right: 5px;
+    display: block;
+    float: left;
+    min-width: 50px;
+}
+
+.action-button {
+    margin-top: 5px;
+    margin-right: 5px;
 }

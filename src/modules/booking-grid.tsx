@@ -6,27 +6,7 @@ import 'semantic-ui-css/semantic.min.css';
 import React, { useEffect, useState } from 'react';
 import { TBooking } from '../models/booking.ts';
 
-const test_date = new Date();
-test_date.setHours(17, 0, 0 ,0)
-
-const test_bookings: TBooking[] =[
-  { 
-    from: test_date.getTime(),
-    booked_for: "Eric James Booker",
-    phone_number: "123456789",
-    number_of_people:3,
-    table_numbers: [11,12]
-  },
-  { 
-    from: Date.now(),
-    booked_for: "Booker",
-    phone_number: "123456789",
-    number_of_people: 1,
-    table_numbers: [75]
-  }
-]
-
-function BookingGrid({forDate}) {
+function BookingGrid({forDate, setShowController, bookingData}) {
   const COLUMNS_COUNT = 13;
   const ROWS_COUNT = 40;
   const STARTING_HOUR = 17;
@@ -35,9 +15,9 @@ function BookingGrid({forDate}) {
   const [bookings, setBookings] = useState<TBooking[]>([]);
 
   useEffect(() => {
-    const filtered = test_bookings.filter(b => new Date(b.from).getDate() === forDate.getDate());
-    setBookings(filtered);
-  }, [forDate]);
+    const filtered = bookingData.filter(b => new Date(b.from).getDate() === forDate.getDate());
+    setBookings([...filtered]);
+  }, [bookingData, forDate]);
   
   const convertTimeIndexToHour = (index: number): number => {
     index -= 1;

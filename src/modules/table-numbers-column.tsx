@@ -38,9 +38,9 @@ function TableNumbersColumn() {
     undefined,
     { number: 71, seatsCount: 4 },
     { number: 72, seatsCount: 4, can_merge_down: true },
-    { number: 81, seatsCount: 2, can_merge_up: true },
-    { number: 73, seatsCount: 4, can_merge_down: true },
     { number: 82, seatsCount: 2, can_merge_up: true },
+    { number: 73, seatsCount: 4, can_merge_down: true },
+    { number: 83, seatsCount: 2, can_merge_up: true },
     { number: 75, seatsCount: 8 },
   ];
       
