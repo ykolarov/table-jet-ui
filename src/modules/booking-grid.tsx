@@ -3,17 +3,16 @@ import HoursAvailableRow from './hours-available-row.tsx';
 import TableNumbersColumn from './table-numbers-column.tsx';
 import { Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TBooking } from '../models/booking.ts';
 
 const test_date = new Date();
 test_date.setHours(17, 0, 0 ,0)
 
 const test_bookings: TBooking[] =[
-  
   { 
     from: test_date.getTime(),
-    booked_for: "Eric",
+    booked_for: "Eric James Booker",
     phone_number: "123456789",
     number_of_people:3,
     table_numbers: [11,12]
@@ -27,13 +26,19 @@ const test_bookings: TBooking[] =[
   }
 ]
 
-
-function BookingGrid() {
+function BookingGrid({forDate}) {
   const COLUMNS_COUNT = 13;
   const ROWS_COUNT = 40;
   const STARTING_HOUR = 17;
   const BOOKING_HOUR_DURATION = 2;
 
+  const [bookings, setBookings] = useState<TBooking[]>([]);
+
+  useEffect(() => {
+    const filtered = test_bookings.filter(b => new Date(b.from).getDate() === forDate.getDate());
+    setBookings(filtered);
+  }, [forDate]);
+  
   const convertTimeIndexToHour = (index: number): number => {
     index -= 1;
     index = STARTING_HOUR + 0.5 * index;
@@ -53,7 +58,7 @@ function BookingGrid() {
 
     const currentRowTime = convertTimeIndexToHour(columnIndex);
 
-    const thisRowIsBooked = test_bookings.find(b => 
+    const thisRowIsBooked = bookings.find(b => 
       (convertDateToHour(b.from) === currentRowTime ||
       (convertDateToHour(b.from) < currentRowTime && convertDateToHour(b.from) + BOOKING_HOUR_DURATION > currentRowTime)) &&
       b.table_numbers.includes(currentTableNumber)

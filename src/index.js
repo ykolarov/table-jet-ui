@@ -2,12 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
-import BookingGrid from './modules/booking-grid.tsx';
+import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
+import BookingState from './modules/homepage.tsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+  
 root.render(
   <React.StrictMode>
-    <BookingGrid />
+    <BookingState/>
   </React.StrictMode>
 );
 

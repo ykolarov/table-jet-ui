@@ -1,11 +1,13 @@
 .booking-grid {
     width: 90%; /* Full width */
     text-align: center; /* Center text horizontally */
-    margin: 4% auto 0% auto;
+    margin: 2% auto 0% auto;
 }
 
 .booked {
     background-color: rgb(227, 236, 175);
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .no-gutters {
@@ -22,6 +24,12 @@
     .column {
         margin: 0 !important;
     }
+}
+
+.calendar {
+    margin: 1rem auto 1% auto;
+    width: 90%; /* Full width */
+    text-align: center; /* Center text horizontally */
 }
 
 .row-data {
