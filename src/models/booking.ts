@@ -5,5 +5,6 @@ export type TBooking = {
     phone_number: string,
     number_of_people: number,
     table_numbers: number[],
-    special_note?: string
+    special_note?: string,
+    background_colour?: string
 }

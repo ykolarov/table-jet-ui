@@ -49,7 +49,7 @@ const BookingGrid: React.FC<TBookingGridProps> = ({forDate, bookingData, expandB
       b.table_numbers.includes(currentTableNumber)
     )
 
-    return <p onClick={bookingOnRow ? () => expandBookingController(bookingOnRow) : undefined} className={`${bookingOnRow ? "booked": ""}`}>{bookingOnRow ? bookingOnRow?.booked_for : "-"}</p>
+    return <p style={{backgroundColor: bookingOnRow?.background_colour}} onClick={bookingOnRow ? () => expandBookingController(bookingOnRow) : undefined} className={`${bookingOnRow ? "booked": ""}`}>{bookingOnRow ? bookingOnRow?.number_of_people : "-"}</p>
   }
 
   const getRows = (forColumn: number) => {

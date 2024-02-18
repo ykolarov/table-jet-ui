@@ -22,12 +22,57 @@ function HomePage() {
 
     const getNewBooking = (booking: TBooking) => {
         booking.id = Math.random().toString(16).slice(2);
+        booking.background_colour = getRandomSuitableColor();
         const tempDate = forDate;
         tempDate.setHours(17,0,0,0);
         booking.from = tempDate.getTime();
 
         assignTableNumberToBooking(booking, false, false);
     }
+
+    function getRandomSuitableColor() {
+        const suitableColors = [
+            '#f5f5dc', // Charcoal
+            '#fccb06', // Golden Yellow
+            '#ff6347',
+            '#ffa07a', 
+            '#bdb76b', 
+            '#d1e189', 
+            '#ffe4c4',
+            '#ee82ee', 
+            '#fdf5e6', 
+            '#ffe4b5', 
+            '#66cdaa',
+            '#29ab87',
+            '#5f9ea0',
+            '#e8f48c',
+            '#e3ff00',
+            '#c2b280',
+            '#deb887',
+            '#c19a6b',
+            '#bc987e',
+            '#faf0e6',
+            '#e3dac9',
+            '#ffe4cd',
+            '#e6e6fa',
+            '#cec8ef',
+            '#ccccff',
+            '#b39eb5',
+            '#e6e8fa',
+            '#d6cadd',
+            '#dda0dd',
+            '#d8bfd8',
+            '#8c9e5e',
+            '#f0f8ff',
+            '#f0fff0',
+            '#f8f4ff',
+            '#f9ffe3',
+        ];
+    
+        const randomIndex = Math.floor(Math.random() * suitableColors.length);
+        return suitableColors[randomIndex];
+    }
+    
 
     const assignTableNumberToBooking = (booking: TBooking, preferUp: boolean, preferDown: boolean) => {
         let two_seater_tables = [
@@ -265,6 +310,8 @@ function HomePage() {
             <Button className="add-booking" onClick={() => setShowAddBooking(true)}>
                 Add Booking
             </Button>
+
+            <p className="warning-text">This is a Demo/Proof of Concept for testing purposes</p>
         </div>
 
         <AddBookingPopup 

@@ -15,6 +15,7 @@ const AddBookingPopup: React.FC<TBookingFormProps> = ({ showAddBooking, setShowA
         number_of_people: 1,
         table_numbers: [],
         special_note: '',
+        id: ''
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
