@@ -82,4 +82,30 @@ label {
 .action-button {
     margin-top: 5px;
     margin-right: 5px;
+    background-color:#2980b9;
+    color: white;
+}
+
+.close-button {
+    margin-top: 5px;
+    margin-right: 5px;
+    background-color: red;
+    color: white;
+}
+
+.controller-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-button {
+    background-color: rgb(0, 15, 27) !important;
+    color: white !important;
+    font-size: 16px;
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    cursor: pointer;
+    outline: none;
 }

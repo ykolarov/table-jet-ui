@@ -91,7 +91,7 @@ const AddBookingPopup: React.FC<TBookingFormProps> = ({ showAddBooking, setShowA
                     />
                 </div>
                 <button type="submit" className="action-button">Done</button>
-                <button onClick={hidePopup} className="action-button">Abort</button>
+                <button onClick={hidePopup} className="close-button">Close</button>
             </form>
         </div>
     );

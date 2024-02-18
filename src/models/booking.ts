@@ -1,4 +1,5 @@
 export type TBooking = {
+    id: string,
     from: number,
     booked_for: string,
     phone_number: string,

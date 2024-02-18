@@ -21,6 +21,7 @@ function HomePage() {
     const hideBookingController = () => setShowController(false);
 
     const getNewBooking = (booking: TBooking) => {
+        booking.id = Math.random().toString(16).slice(2);
         const tempDate = forDate;
         tempDate.setHours(17,0,0,0)
         booking.from = tempDate.getTime()
@@ -90,10 +91,58 @@ function HomePage() {
                 if(attemptToMergeAssignTables(4,  sixteen_combo[i], booking)) return;
             }
         }
+
+        alert("Could not find enough seats for the last order")
     }
 
+    const getBookingsForSpecificDay = (day: number) => {
+        return bookingData.filter(
+            b => new Date(b.from).getDate() === new Date(day).getDate() &&
+            new Date(b.from).getMonth() === new Date(day).getMonth() && 
+            new Date(b.from).getFullYear() === new Date(day).getFullYear()
+        );
+    }
+
+    const moveBooking = (direction: string) => {
+        const thirtyMinutesInMilliseconds = 30 * 60 * 1000;
+
+        if(direction == "left") {
+            const newFrom = bookingBeingControlled?.from ? bookingBeingControlled?.from - thirtyMinutesInMilliseconds : undefined
+            updateBookingFromDate(bookingBeingControlled?.id, newFrom)
+        }
+        if(direction == "up") {
+
+        }
+        if(direction == "down") {
+
+        }
+        if(direction == "right") {
+            const newFrom = bookingBeingControlled?.from ? bookingBeingControlled?.from + thirtyMinutesInMilliseconds : undefined
+            updateBookingFromDate(bookingBeingControlled?.id, newFrom)
+        }
+    }
+
+    const updateBookingFromDate = (bookingId, newDate) => {
+        if(!bookingId || !newDate) return;
+
+        const updatedBookings = bookingData.map((booking) => {
+          if (booking.id === bookingId) {
+            return { ...booking, from: newDate };
+          }
+          return booking; 
+        });
+
+        setBookingBeingControlled({
+            ...bookingBeingControlled,
+            from: newDate
+        });
+
+        setBookingData(updatedBookings);
+      };
+
     const attemptToMergeAssignTables = (seatsPerTable: number, mergableTablesList: number[], booking: TBooking): boolean => {
-        const bookingsForSameDay = bookingData.filter(b => new Date(b.from).getDate() === new Date(booking.from).getDate());
+        // TODO: extract bokingsforsameday into helper method
+        const bookingsForSameDay = getBookingsForSpecificDay(booking.from);
         if(bookingsForSameDay.length == 0) {
             booking.table_numbers = mergableTablesList;
             setBookingData((prevData) => [...prevData, booking]);
@@ -118,7 +167,7 @@ function HomePage() {
     }
 
     const attemptToAssignToTable = (tableNumber: number, booking: TBooking) => {
-        const bookingsForSameDay = bookingData.filter(b => new Date(b.from).getDate() === new Date(booking.from).getDate());
+        const bookingsForSameDay = getBookingsForSpecificDay(booking.from);
         const bookingsForSameTable = bookingsForSameDay.filter(b => b.table_numbers.some(t => t == tableNumber));
 
         if(bookingsForSameTable.length == 0) {
@@ -171,9 +220,10 @@ function HomePage() {
 
         <BookingControllerPopup 
             showController={showController}
-            hideBookingController={hideBookingController}
-            setBookingData={setBookingData}
             bookingBeingControlled={bookingBeingControlled}
+            bookingsForSameDay={getBookingsForSpecificDay(forDate.getTime())}
+            hideBookingController={hideBookingController}
+            moveBooking={moveBooking}
         />
 
         <BookingGrid
