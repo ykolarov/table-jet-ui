@@ -32,10 +32,10 @@ const BookingControllerPopup: React.FC<TBookingGridProps> = ({bookingBeingContro
         return false;
     }
     const moveUpIsDisabled = ():boolean => {
-        return true;
+        return false;
     }
     const moveDownIsDisabled = ():boolean => {
-        return true;
+        return false;
     }
     const moveRightIsDisabled = ():boolean => {
         const bookingDate = bookingBeingControlled?.from && new Date(bookingBeingControlled?.from);
@@ -59,6 +59,7 @@ const BookingControllerPopup: React.FC<TBookingGridProps> = ({bookingBeingContro
     
     return (
         <div className={`controller popup ${showController ? "" : "hidden"}`}>
+            <p>{bookingBeingControlled?.booked_for} - {bookingBeingControlled?.number_of_people} seats</p>
             <div className="controller-buttons">
                 <Button className="control-button" disabled={moveLeftIsDisabled()}  onClick={() => moveBooking("left")}>←</Button>
                 <Button className="control-button" disabled={moveUpIsDisabled()}    onClick={() => moveBooking("up")}>↑</Button>
