@@ -12,7 +12,7 @@ type TBookingGridProps = {
   
 const BookingControllerPopup: React.FC<TBookingGridProps> = ({bookingBeingControlled, showController, bookingsForSameDay, hideBookingController, moveBooking}) => {
     const twoHoursInMilliseconds = 2 * 60 * 60 * 1000;
-    
+
     const moveLeftIsDisabled = ():boolean => {
         const bookingDate = bookingBeingControlled?.from && new Date(bookingBeingControlled?.from);
         if(!bookingDate) return true;
@@ -20,7 +20,7 @@ const BookingControllerPopup: React.FC<TBookingGridProps> = ({bookingBeingContro
         if(bookingDate.getHours() == 17 && bookingDate.getMinutes() == 0) return true;
 
         const tableHasOtherBookings = bookingsForSameDay.filter(x => 
-            bookingBeingControlled.table_numbers.every((num) => x.table_numbers.includes(num) &&
+            bookingBeingControlled.table_numbers.some((num) => x.table_numbers.includes(num) &&
             x.id != bookingBeingControlled.id)
         )
         const leftIsTaken = tableHasOtherBookings.some(x =>
@@ -45,7 +45,7 @@ const BookingControllerPopup: React.FC<TBookingGridProps> = ({bookingBeingContro
         if(bookingDate.getHours() > 20) return true;
 
         const tableHasOtherBookings = bookingsForSameDay.filter(x => 
-            bookingBeingControlled.table_numbers.every((num) => x.table_numbers.includes(num) &&
+            bookingBeingControlled.table_numbers.some((num) => x.table_numbers.includes(num) &&
             x.id != bookingBeingControlled.id)
         )
         const rightIsTaken = tableHasOtherBookings.some(x =>
@@ -60,9 +60,9 @@ const BookingControllerPopup: React.FC<TBookingGridProps> = ({bookingBeingContro
     return (
         <div className={`controller popup ${showController ? "" : "hidden"}`}>
             <div className="controller-buttons">
-                <Button className="control-button" disabled={moveLeftIsDisabled()} onClick={() => moveBooking("left")}>←</Button>
-                <Button className="control-button" disabled={moveUpIsDisabled()} onClick={() => moveBooking("up")}>↑</Button>
-                <Button className="control-button" disabled={moveDownIsDisabled()} onClick={() => moveBooking("down")}>↓</Button>
+                <Button className="control-button" disabled={moveLeftIsDisabled()}  onClick={() => moveBooking("left")}>←</Button>
+                <Button className="control-button" disabled={moveUpIsDisabled()}    onClick={() => moveBooking("up")}>↑</Button>
+                <Button className="control-button" disabled={moveDownIsDisabled()}  onClick={() => moveBooking("down")}>↓</Button>
                 <Button className="control-button" disabled={moveRightIsDisabled()} onClick={() => moveBooking("right")}>→</Button>
             </div>
             <button onClick={hideBookingController} className="close-button">Close</button>

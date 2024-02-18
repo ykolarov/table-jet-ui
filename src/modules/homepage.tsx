@@ -111,7 +111,7 @@ function HomePage() {
             updateBookingFromDate(bookingBeingControlled?.id, newFrom)
         }
         if(direction == "up") {
-
+            
         }
         if(direction == "down") {
 
