@@ -10,8 +10,15 @@ function HomePage() {
     const [forDate, setForDate] = useState(new Date());
     const [showController, setShowController] = useState(false);
     const [showAddBooking, setShowAddBooking] = useState(false);
-
     const [bookingData, setBookingData] = useState<TBooking[]>([]);
+    const [bookingBeingControlled, setBookingBeingControlled] = useState<TBooking | undefined>(undefined);
+
+    const expandBookingController = (booking: TBooking) => {
+        setShowController(true);
+        setBookingBeingControlled(booking);
+    }
+
+    const hideBookingController = () => setShowController(false);
 
     const getNewBooking = (booking: TBooking) => {
         const tempDate = forDate;
@@ -22,17 +29,28 @@ function HomePage() {
         const four_seater_tables = [11,12,13,14,21,22,23,31,32,33,34,41,42,51,43,52,44,53,45,54,71,72,73]
         
         // 6-seaters
-        const six_combo = [[72,82],[73,83]]
+        const six_combo = [
+            [1,2,3],[2,3,4],[3,4,5],[4,5,6],[5,6,7],
+            [72,82],[73,83]
+        ]
 
         // 8-seaters
-        const eight_combo = [[21,22],[51,42],[52,43],[53,44],[54,45]]
+        const eight_combo = [
+            [11,12],[12,13],[13,14],
+            [21,22],
+            [31,32],[32,33],[33,34],
+            [51,42],[52,43],[53,44],[54,45],
+            [1,2,3,4],[2,3,4,5],[3,4,5,6],[4,5,6,7]
+        ]
 
         // 14-seats 
         const fourteen_combo = [[1,2,3,4,5,6,7]]
 
         // 16-seats
-        const sixteen_combo = [[11,12,13,14],[31,32,33,34]]
-
+        const sixteen_combo = [
+            [11,12,13,14],
+            [31,32,33,34]
+        ]
 
         if(booking.number_of_people <= 2) {
             for (let i = 0; i < two_seater_tables.length; i++) {
@@ -43,38 +61,60 @@ function HomePage() {
 
         if (booking.number_of_people <= 4) {
             for (let i = 0; i < four_seater_tables.length; i++) {
-                const success = attemptToAssignToTable(four_seater_tables[i], booking);
-                if(success) {
-                    return;
-                }
+                if(attemptToAssignToTable(four_seater_tables[i], booking)) return;
             }
         }
 
         if(booking.number_of_people <= 6) {
-
+            for (let i = 0; i < six_combo.length; i++) {
+                if(attemptToMergeAssignTables(3, six_combo[i], booking)) return;
+            }
         }
         
         if(booking.number_of_people <= 8) {
-            const success = attemptToAssignToTable(75, booking);
-            if(success) return;
+            if(attemptToAssignToTable(75, booking)) return;
+
+            for (let i = 0; i < eight_combo.length; i++) {
+                if(attemptToMergeAssignTables(4,  eight_combo[i], booking)) return;
+            }
         }
 
         if(booking.number_of_people <= 14) {
-
+            for (let i = 0; i < fourteen_combo.length; i++) {
+                if(attemptToMergeAssignTables(2,  fourteen_combo[i], booking)) return;
+            }
         }
 
         if(booking.number_of_people <= 16) {
-
+            for (let i = 0; i < sixteen_combo.length; i++) {
+                if(attemptToMergeAssignTables(4,  sixteen_combo[i], booking)) return;
+            }
         }
-
-        console.log(booking)
-        console.log(bookingData)
     }
 
-    const attemptToMergeTable = (seatsNeeded: number, seatsPerTable: number, mergableTablesList: number[], booking: TBooking) => {
-        //const bookingForSameDay = bookingData.filter(b => new Date(b.from).getDate() === new Date(booking.from).getDate());
-        //const bookingsForSameTable = bookingForSameDay.filter(b => b.table_numbers.some(t => t == tableNumber));
+    const attemptToMergeAssignTables = (seatsPerTable: number, mergableTablesList: number[], booking: TBooking): boolean => {
+        const bookingsForSameDay = bookingData.filter(b => new Date(b.from).getDate() === new Date(booking.from).getDate());
+        if(bookingsForSameDay.length == 0) {
+            booking.table_numbers = mergableTablesList;
+            setBookingData((prevData) => [...prevData, booking]);
+            return true;
+        } else {
+            //TODO: CHECK if seats per table should be used
+            let allTablesAreFreeForOrderTime = true;
 
+            for (let i = 0; i < mergableTablesList.length; i++) {
+                if(bookingsForSameDay.some(x => x.table_numbers.includes(mergableTablesList[i]))) allTablesAreFreeForOrderTime = false;
+            }
+
+            if(allTablesAreFreeForOrderTime) {
+                booking.table_numbers = mergableTablesList;
+                setBookingData((prevData) => [...prevData, booking]);
+                return true;
+            } else {
+                // TODO: how to assign if day is partially occupied but still free
+            }
+        }
+        return false;
     }
 
     const attemptToAssignToTable = (tableNumber: number, booking: TBooking) => {
@@ -131,11 +171,14 @@ function HomePage() {
 
         <BookingControllerPopup 
             showController={showController}
+            hideBookingController={hideBookingController}
+            setBookingData={setBookingData}
+            bookingBeingControlled={bookingBeingControlled}
         />
 
         <BookingGrid
             forDate={forDate}
-            setShowController={setShowController}
+            expandBookingController={expandBookingController}
             bookingData={bookingData}
         />
     </>

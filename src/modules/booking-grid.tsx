@@ -6,7 +6,13 @@ import 'semantic-ui-css/semantic.min.css';
 import React, { useEffect, useState } from 'react';
 import { TBooking } from '../models/booking.ts';
 
-function BookingGrid({forDate, setShowController, bookingData}) {
+type TBookingGridProps = {
+  forDate: Date;
+  bookingData: TBooking[];
+  expandBookingController: (booking: TBooking) => void;
+};
+
+const BookingGrid: React.FC<TBookingGridProps> = ({forDate, bookingData, expandBookingController}) => {
   const COLUMNS_COUNT = 13;
   const ROWS_COUNT = 40;
   const STARTING_HOUR = 17;
@@ -18,7 +24,7 @@ function BookingGrid({forDate, setShowController, bookingData}) {
     const filtered = bookingData.filter(b => new Date(b.from).getDate() === forDate.getDate());
     setBookings([...filtered]);
   }, [bookingData, forDate]);
-  
+
   const convertTimeIndexToHour = (index: number): number => {
     index -= 1;
     index = STARTING_HOUR + 0.5 * index;
@@ -37,14 +43,13 @@ function BookingGrid({forDate, setShowController, bookingData}) {
     if (currentTableNumber === undefined) return "-"
 
     const currentRowTime = convertTimeIndexToHour(columnIndex);
-
-    const thisRowIsBooked = bookings.find(b => 
+    const bookingOnRow = bookings.find(b => 
       (convertDateToHour(b.from) === currentRowTime ||
       (convertDateToHour(b.from) < currentRowTime && convertDateToHour(b.from) + BOOKING_HOUR_DURATION > currentRowTime)) &&
       b.table_numbers.includes(currentTableNumber)
     )
 
-    return <p className={`${thisRowIsBooked ? "booked": ""}`}>{thisRowIsBooked ? thisRowIsBooked?.booked_for : "-"}</p>
+    return <p onClick={bookingOnRow ? () => expandBookingController(bookingOnRow) : undefined} className={`${bookingOnRow ? "booked": ""}`}>{bookingOnRow ? bookingOnRow?.booked_for : "-"}</p>
   }
 
   const getRows = (forColumn: number) => {
