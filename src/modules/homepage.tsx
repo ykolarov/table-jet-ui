@@ -30,6 +30,7 @@ function HomePage() {
         assignTableNumberToBooking(booking, false, false);
     }
 
+    // TODO: extract in helper module
     function getRandomSuitableColor() {
         const suitableColors = [
             '#f5f5dc', // Charcoal
@@ -73,7 +74,6 @@ function HomePage() {
         return suitableColors[randomIndex];
     }
     
-
     const assignTableNumberToBooking = (booking: TBooking, preferUp: boolean, preferDown: boolean) => {
         let two_seater_tables = [
             1,2,3,4,5,6,7
@@ -142,13 +142,13 @@ function HomePage() {
                 if(attemptToAssignToTable(four_seater_tables[i], booking)) return true;
             }
             for (let i = 0; i < four_combo.length; i++) {
-                if(attemptToMergeAssignTables(2, four_combo[i], booking)) return true;
+                if(attemptToMergeAssignTables(four_combo[i], booking)) return true;
             }
         }
 
         if(booking.number_of_people <= 6) {
             for (let i = 0; i < six_combo.length; i++) {
-                if(attemptToMergeAssignTables(3, six_combo[i], booking)) return true;
+                if(attemptToMergeAssignTables(six_combo[i], booking)) return true;
             }
         }
         
@@ -158,7 +158,7 @@ function HomePage() {
             }
 
             for (let i = 0; i < eight_combo.length; i++) {
-                if(attemptToMergeAssignTables(4,  eight_combo[i], booking)) return true;
+                if(attemptToMergeAssignTables(eight_combo[i], booking)) return true;
             }
 
             if(preferDown || preferUp) {
@@ -168,13 +168,13 @@ function HomePage() {
 
         if(booking.number_of_people <= 14) {
             for (let i = 0; i < fourteen_combo.length; i++) {
-                if(attemptToMergeAssignTables(2,  fourteen_combo[i], booking)) return true;
+                if(attemptToMergeAssignTables(fourteen_combo[i], booking)) return true;
             }
         }
 
         if(booking.number_of_people <= 16) {
             for (let i = 0; i < sixteen_combo.length; i++) {
-                if(attemptToMergeAssignTables(4,  sixteen_combo[i], booking)) return true;
+                if(attemptToMergeAssignTables(sixteen_combo[i], booking)) return true;
             }
         }
 
@@ -240,15 +240,15 @@ function HomePage() {
         setBookingData(updatedBookings);
       };
 
-    const attemptToMergeAssignTables = (seatsPerTable: number, mergableTablesList: number[], booking: TBooking): boolean => {
-        // TODO: extract bokingsforsameday into helper method
+    const attemptToMergeAssignTables = (mergableTablesList: number[], booking: TBooking): boolean => {
         const bookingsForSameDay = getBookingsForSpecificDay(booking.from);
+        const twoHoursInMilliseconds = 2 * 60 * 60 * 1000;
+
         if(bookingsForSameDay.length == 0) {
             booking.table_numbers = mergableTablesList;
             setBookingData((prevData) => [...prevData, booking]);
             return true;
         } else {
-            //TODO: CHECK if seats per table should be used
             let allTablesAreFreeForOrderTime = true;
 
             for (let i = 0; i < mergableTablesList.length; i++) {
@@ -261,6 +261,27 @@ function HomePage() {
                 return true;
             } else {
                 // TODO: how to assign if day is partially occupied but still free
+                let availableTime = new Date(forDate);
+                availableTime.setHours(17,0,0,0);
+
+                while((availableTime.getHours() == 20 && availableTime.getMinutes() == 0) || availableTime.getHours() < 20) {
+                    
+                    const bookingsForSameDayAndTables = bookingsForSameDay.filter(t =>
+                        mergableTablesList.some((num) => t.table_numbers.includes(num))
+                    );
+
+                    if(bookingsForSameDayAndTables.every(t =>
+                        t.from - twoHoursInMilliseconds >= availableTime.getTime() ||
+                        t.from + twoHoursInMilliseconds <= availableTime.getTime()
+                    )) {
+                        booking.from = availableTime.getTime();
+                        booking.table_numbers = mergableTablesList;
+                        setBookingData((prevData) => [...prevData, booking]);
+                        return true;
+                    }
+                    
+                    availableTime = new Date(availableTime.getTime() + 30 * 60 * 1000)
+                }
             }
         }
         return false;
